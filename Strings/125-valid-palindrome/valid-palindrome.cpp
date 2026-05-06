@@ -8,7 +8,7 @@ public:
     }
     bool isPalindrome(string s) {
         int start = 0, end = s.size() - 1;
-        if (s.size() == 1 || s.size() == 0) return true;
+        if (s.size() == 1 || s.size() == 0) return true; 
         while (start < end){
             if (!isAlphaNumeric(s[start])){
                 start++; 
