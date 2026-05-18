@@ -1,14 +1,12 @@
 class Solution {
 public:
     bool isIsomorphic(string s, string t) {
-        unordered_map<char, char> mapST;
-        unordered_map<char, char> mapTS;
+        int arrST[256] = {0}, arrTS[256] = {0};
         for (int i=0; i<s.size(); i++){
             char c1 = s[i], c2 = t[i];
-            if ((mapST.count(c1) && mapST[c1] != c2) ||
-                (mapTS.count(c2) && mapTS[c2] != c1)) return false;
-            mapST[c1] = c2;
-            mapTS[c2] = c1;
+            if (arrST[c1] != arrTS[c2]) return false;
+            arrST[c1] = i+1;
+            arrTS[c2] = i+1;
         }
         return true;
     }
