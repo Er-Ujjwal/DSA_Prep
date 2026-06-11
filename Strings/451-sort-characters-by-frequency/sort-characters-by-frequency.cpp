@@ -1,18 +1,26 @@
 class Solution {
 public:
+    typedef pair<char, int> P;
     string frequencySort(string s) {
-        unordered_map<char, int> mpp;
-        for (char c : s){
-            mpp[c]++;
+        vector<P> vec(123);
+        for (char &ch : s){
+            int freq = vec[ch].second;
+            vec[ch] = {ch, freq+1};
         }
-        vector<string>bucket(s.size() + 1);
-        for (auto &[ch, freq] : mpp){
-            bucket[freq] += string(freq, ch);
+        // lambda function here acts a comparator fxn in sorting.
+        auto lambda = [&](P &p1, P &p2){
+            return p1.second > p2.second;
+        };
+        sort(begin(vec), end(vec), lambda);
+        string result =  "";
+        for (int i=0; i<123; i++){
+            if (vec[i].second > 0){
+                char ch = vec[i].first;
+                int freq = vec[i].second;
+                string temp = string(freq, ch);
+                result += temp;
+            }
         }
-        string ans;
-        for (int i=s.size(); i>=1; i--){
-            ans += bucket[i];
-        }
-        return ans;
+        return result;
     }
 };
