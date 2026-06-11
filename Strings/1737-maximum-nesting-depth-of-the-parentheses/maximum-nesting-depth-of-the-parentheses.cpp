@@ -8,7 +8,6 @@ public:
                 ans = max(ans, depth);
             }
             else if (s[i] == ')') depth--;
-            else continue;
         }
         return ans;
     }
