@@ -1,12 +1,12 @@
 class Solution {
 public:
     int distributeCandies(vector<int>& candyType) {
-        unordered_map<int, int>mpp;
+        unordered_set<int>st;
         int n = candyType.size();
-        for (int i=0; i<n; i++){
-            mpp[candyType[i]]++;
+        for (int x : candyType){
+            st.insert(x);
         }
-        int total = mpp.size();
+        int total = st.size();
         return min(total, n/2);
     }
 };
