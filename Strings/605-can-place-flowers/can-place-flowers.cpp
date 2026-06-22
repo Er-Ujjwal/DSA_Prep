@@ -4,11 +4,13 @@ public:
         int len = flowerbed.size();
 
         for (int i = 0; i < len && n > 0; i++) {
-            if (flowerbed[i] == 0 &&
-            ((i > 0 && flowerbed[i - 1] == 0) || i == 0) && 
-            ((i + 1 < len && flowerbed[i + 1] == 0) || i == len - 1)) {
-                n--;
+
+            bool left  = (i == 0) || (flowerbed[i-1] == 0);
+            bool right = (i == len-1) || (flowerbed[i+1] == 0);
+
+            if (flowerbed[i] == 0 && left && right) {
                 flowerbed[i] = 1;
+                n--;
             }
         }
 
