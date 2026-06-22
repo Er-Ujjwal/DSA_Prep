@@ -5,13 +5,7 @@ public:
         for (int i=0; i<text.size(); i++){
             mpp[text[i] - 'a']++;
         }
-        int b = mpp['b'-'a'];
-        int a = mpp['a'-'a'];
-        int l = mpp['l'-'a'] / 2;
-        int o = mpp['o'-'a'] / 2;
-        int n = mpp['n'-'a'];
-        int res = min(b, min(a, min(l, min(o, n))));
-        return res;
-
+        return min(mpp['b'-'a'], min(mpp['a'-'a'], min(mpp['l'-'a']/2,
+                    min(mpp['o'-'a']/2, mpp['n'-'a']))));
     }
 };
