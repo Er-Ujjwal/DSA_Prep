@@ -11,7 +11,7 @@ public:
             for (int x : seen) cnt[x]++;
         }  
         int ans = -1;
-        for (auto [x,c] : cnt){
+        for (auto &[x,c] : cnt){
             if (c == 1) ans = max(ans, x);
         }
         return ans;
