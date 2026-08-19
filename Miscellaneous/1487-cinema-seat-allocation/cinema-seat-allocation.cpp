@@ -1,24 +1,18 @@
 class Solution {
 public:
     int maxNumberOfFamilies(int n, vector<vector<int>>& reservedSeats) {
-        map<int, set<int>> mpp;
+        unordered_map<int, int>mp;
         for (auto &x : reservedSeats){
-            mpp[x[0]].insert(x[1]);
+            int row = x[0], seat = x[1];
+            if (seat >=2 && seat <=9) mp[row] |= (1 << seat);
         }
-        int ans = (n-mpp.size())*2;
-        for (auto &[row, seats] : mpp){
-            bool left = true, middle = true, right = true;
-            for (int i=2; i<=5; i++){
-                if (seats.count(i)) left = false;
-            }
-            for (int i=4; i<=7; i++){
-                if (seats.count(i)) middle = false;
-            }
-            for (int i=6; i<=9; i++){
-                if (seats.count(i)) right = false;
-            }
+        int ans = (n-mp.size())*2;
+        for (auto &[row, mask] : mp){
+            bool left = !(mask & ((1<<2) | (1<<3) | (1<<4) | (1<<5)));
+            bool middle = !(mask & ((1<<4) | (1<<5) | (1<<6) | (1<<7)));
+            bool right = !(mask & ((1<<6) | (1<<7) | (1<<8) | (1<<9)));
             if (left && right) ans += 2;
-            else if (left || middle || right) ans +=1;
+            else if (left || middle || right) ans += 1;
         }
         return ans;
     }
