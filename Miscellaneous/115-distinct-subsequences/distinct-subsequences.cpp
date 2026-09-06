@@ -12,7 +12,7 @@ public:
                 dp[i][j] = min(dp[i][j], (long long)INT_MAX);
             }
         }
-        return dp[n][m];
+        return (int)dp[n][m];
     }
 };
 
