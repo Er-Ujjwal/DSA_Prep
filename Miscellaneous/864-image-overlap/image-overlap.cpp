@@ -9,13 +9,13 @@ public:
                 if (img2[i][j]) B.push_back({i, j});
             }
         }
-        unordered_map<string, int> freq;
+        unordered_map<int, int> freq;
         int ans = 0;
         for (auto [i, j] : A){
             for (auto [x, y] : B){
-                int dx = x-i;
-                int dy = y-j;
-                string key = to_string(dx) + "," + to_string(dy);
+                int dx = x-i+n-1;
+                int dy = y-j+n-1;
+                int key = dx*(2*n-1) + dy;
                 ans = max(ans, ++freq[key]);
             }
         }
