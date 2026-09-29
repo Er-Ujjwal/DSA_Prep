@@ -1,34 +1,82 @@
-<h2><a href="https://leetcode.com/problems/reverse-linked-list">206. Reverse Linked List</a></h2><h3>Easy</h3><hr><p>Given the <code>head</code> of a singly linked list, reverse the list, and return <em>the reversed list</em>.</p>
+# 206. Reverse Linked List
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg" style="width: 542px; height: 222px;" />
-<pre>
-<strong>Input:</strong> head = [1,2,3,4,5]
-<strong>Output:</strong> [5,4,3,2,1]
-</pre>
+**Difficulty:** Easy  
+**Topics:** Linked Lists  
+**LeetCode:** [Link](https://leetcode.com/problems/reverse-linked-list/)
 
-<p><strong class="example">Example 2:</strong></p>
-<img alt="" src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg" style="width: 182px; height: 222px;" />
-<pre>
-<strong>Input:</strong> head = [1,2]
-<strong>Output:</strong> [2,1]
-</pre>
+---
 
-<p><strong class="example">Example 3:</strong></p>
+## Problem Statement
 
-<pre>
-<strong>Input:</strong> head = []
-<strong>Output:</strong> []
-</pre>
+Reverse a singly linked list and return the new head.
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example:**
+```
+Input:  1->2->3->4->5
+Output: 5->4->3->2->1
+```
 
-<ul>
-	<li>The number of nodes in the list is the range <code>[0, 5000]</code>.</li>
-	<li><code>-5000 &lt;= Node.val &lt;= 5000</code></li>
-</ul>
+---
 
-<p>&nbsp;</p>
-<p><strong>Follow up:</strong> A linked list can be reversed either iteratively or recursively. Could you implement both?</p>
+## Intuition & Approach
+
+**Iterative — Three pointer technique:**
+Maintain `prev`, `curr`, and `next`. At each step, reverse the `curr->next` pointer to point to `prev`, then advance all three pointers forward.
+
+```
+prev=null, curr=1->2->3->4->5
+
+Step 1: next=2, 1->null, prev=1, curr=2
+Step 2: next=3, 2->1, prev=2, curr=3
+Step 3: next=4, 3->2, prev=3, curr=4
+Step 4: next=5, 4->3, prev=4, curr=5
+Step 5: next=null, 5->4, prev=5, curr=null
+return prev=5 ✅
+```
+
+---
+
+## My Solution
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        while (curr != NULL) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+};
+```
+
+**Complexity:** O(n) time | O(1) space
+
+**Recursive alternative:**
+```cpp
+ListNode* reverseList(ListNode* head) {
+    if (!head || !head->next) return head;
+    ListNode* newHead = reverseList(head->next);
+    head->next->next = head;
+    head->next = nullptr;
+    return newHead;
+}
+```
+
+---
+
+## Mistakes to Avoid
+
+- Losing reference to `next` before reversing — always save `next = curr->next` first
+- Returning `curr` instead of `prev` — at loop end, `curr` is null; `prev` is the new head
+
+---
+
+## Pattern
+
+**"Three pointer reversal"** — Foundation for many linked list problems. Used in LC 92 (reverse sublist), LC 25 (reverse k-group), LC 234 (palindrome linked list).
