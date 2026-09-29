@@ -1,35 +1,80 @@
-<h2><a href="https://leetcode.com/problems/add-two-numbers">2. Add Two Numbers</a></h2><h3>Medium</h3><hr><p>You are given two <strong>non-empty</strong> linked lists representing two non-negative integers. The digits are stored in <strong>reverse order</strong>, and each of their nodes contains a single digit. Add the two numbers and return the sum&nbsp;as a linked list.</p>
+# 2. Add Two Numbers
 
-<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
+**Difficulty:** Medium  
+**Topics:** Linked Lists, Math  
+**LeetCode:** [Link](https://leetcode.com/problems/add-two-numbers/)
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://assets.leetcode.com/uploads/2020/10/02/addtwonumber1.jpg" style="width: 483px; height: 342px;" />
-<pre>
-<strong>Input:</strong> l1 = [2,4,3], l2 = [5,6,4]
-<strong>Output:</strong> [7,0,8]
-<strong>Explanation:</strong> 342 + 465 = 807.
-</pre>
+---
 
-<p><strong class="example">Example 2:</strong></p>
+## Problem Statement
 
-<pre>
-<strong>Input:</strong> l1 = [0], l2 = [0]
-<strong>Output:</strong> [0]
-</pre>
+Two non-empty linked lists represent two non-negative integers in **reverse order**. Add them and return the result as a linked list.
 
-<p><strong class="example">Example 3:</strong></p>
+**Example:**
+```
+Input:  l1=2->4->3, l2=5->6->4
+Output: 7->0->8  (342 + 465 = 807)
+```
 
-<pre>
-<strong>Input:</strong> l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
-<strong>Output:</strong> [8,9,9,9,0,0,0,1]
-</pre>
+---
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+## Intuition & Approach
 
-<ul>
-	<li>The number of nodes in each linked list is in the range <code>[1, 100]</code>.</li>
-	<li><code>0 &lt;= Node.val &lt;= 9</code></li>
-	<li>It is guaranteed that the list represents a number that does not have leading zeros.</li>
-</ul>
+**Simulate digit-by-digit addition with carry:**
+
+Traverse both lists simultaneously. At each step:
+- Sum = `l1->val + l2->val + carry`
+- New digit = `sum % 10`
+- New carry = `sum / 10`
+
+Use dummy head to simplify result list construction. Continue until both lists exhausted AND carry is 0.
+
+**Dry run with `2->4->3` and `5->6->4`:**
+```
+Step 1: 2+5+0=7,  carry=0, node=7
+Step 2: 4+6+0=10, carry=1, node=0
+Step 3: 3+4+1=8,  carry=0, node=8
+Result: 7->0->8 ✅
+```
+
+---
+
+## My Solution
+
+```cpp
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode();
+        ListNode* temp = dummy;
+        int carry = 0;
+        while (l1 || l2 || carry) {
+            int sum = 0;
+            if (l1) { sum += l1->val; l1 = l1->next; }
+            if (l2) { sum += l2->val; l2 = l2->next; }
+            sum += carry;
+            carry = sum / 10;
+            temp->next = new ListNode(sum % 10);
+            temp = temp->next;
+        }
+        return dummy->next;
+    }
+};
+```
+
+**Complexity:** O(max(m,n)) time | O(max(m,n)) space
+
+---
+
+## Mistakes to Avoid
+
+- Not handling carry after both lists end — `while(l1 || l2 || carry)` covers this
+- Checking `l1->val` without null check — always guard with `if(l1)` before accessing
+
+---
+
+## Pattern
+
+**"Dummy head + carry propagation"** — Dummy node simplifies edge cases at head. Carry after loop handles final digit (e.g., 999+1=1000).
+
+Related: LC 445 - Add Two Numbers II (forward order, use stack)
