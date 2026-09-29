@@ -1,34 +1,81 @@
-<h2><a href="https://leetcode.com/problems/sort-list">148. Sort List</a></h2><h3>Medium</h3><hr><p>Given the <code>head</code> of a linked list, return <em>the list after sorting it in <strong>ascending order</strong></em>.</p>
+# 148. Sort List
 
-<p>&nbsp;</p>
-<p><strong class="example">Example 1:</strong></p>
-<img alt="" src="https://assets.leetcode.com/uploads/2020/09/14/sort_list_1.jpg" style="width: 450px; height: 194px;" />
-<pre>
-<strong>Input:</strong> head = [4,2,1,3]
-<strong>Output:</strong> [1,2,3,4]
-</pre>
+**Difficulty:** Medium  
+**Topics:** Linked Lists, Sorting, Divide & Conquer  
+**LeetCode:** [Link](https://leetcode.com/problems/sort-list/)
 
-<p><strong class="example">Example 2:</strong></p>
-<img alt="" src="https://assets.leetcode.com/uploads/2020/09/14/sort_list_2.jpg" style="width: 550px; height: 184px;" />
-<pre>
-<strong>Input:</strong> head = [-1,5,3,4,0]
-<strong>Output:</strong> [-1,0,3,4,5]
-</pre>
+---
 
-<p><strong class="example">Example 3:</strong></p>
+## Problem Statement
 
-<pre>
-<strong>Input:</strong> head = []
-<strong>Output:</strong> []
-</pre>
+Sort a linked list in O(n log n) time and O(1) space.
 
-<p>&nbsp;</p>
-<p><strong>Constraints:</strong></p>
+**Example:**
+```
+Input:  4->2->1->3
+Output: 1->2->3->4
+```
 
-<ul>
-	<li>The number of nodes in the list is in the range <code>[0, 5 * 10<sup>4</sup>]</code>.</li>
-	<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
-</ul>
+---
 
-<p>&nbsp;</p>
-<p><strong>Follow up:</strong> Can you sort the linked list in <code>O(n logn)</code> time and <code>O(1)</code> memory (i.e. constant space)?</p>
+## Intuition & Approach
+
+**Approach used — Extract, sort, reassign (O(n log n) time, O(n) space):**
+1. Extract all values to a vector
+2. Sort the vector
+3. Reassign values back to list nodes in order
+
+Simple and effective, though uses O(n) extra space.
+
+**Optimal — Merge Sort on linked list (O(n log n), O(log n) space):**
+1. Find middle using slow/fast pointers
+2. Split into two halves
+3. Recursively sort each half
+4. Merge the two sorted halves
+
+**Dry run with `4->2->1->3`:**
+```
+Extract: [4,2,1,3]
+Sort:    [1,2,3,4]
+Reassign: 1->2->3->4 ✅
+```
+
+---
+
+## My Solution
+
+```cpp
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if (!head || !head->next) return head;
+        vector<int> list;
+        ListNode* temp = head;
+        while (temp) { list.push_back(temp->val); temp = temp->next; }
+        sort(list.begin(), list.end());
+        temp = head;
+        for (int i = 0; i < list.size() && temp; i++) {
+            temp->val = list[i];
+            temp = temp->next;
+        }
+        return head;
+    }
+};
+```
+
+**Complexity:** O(n log n) time | O(n) space
+
+---
+
+## Mistakes to Avoid
+
+- Modifying `next` pointers instead of values — easiest approach reassigns values only
+- Not handling empty or single node — return early
+
+---
+
+## Pattern
+
+**"Extract → sort → reassign"** — When in-place linked list sorting is complex, extract to array, sort, put back. Trade space for simplicity.
+
+For O(1) space: use bottom-up merge sort on the list itself.
