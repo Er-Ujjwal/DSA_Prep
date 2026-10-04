@@ -12,14 +12,20 @@ class Node {
 class Solution {
   public:
     int lengthOfLoop(Node *head) {
-        Node* temp = head;
-        int count = 0;
-        unordered_map<Node*, int> mp;
-        while (temp){
-            count++;
-            if (mp[temp]) return count-mp[temp];
-            mp[temp] = count;
-            temp = temp->next;
+        Node* slow = head;
+        Node* fast = head;
+        while (fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast){
+                int count = 1;
+                fast = fast->next;
+                while (slow != fast){
+                    count++;
+                    fast = fast->next;
+                }
+                return count;
+            }
         }
         return 0;
     }
