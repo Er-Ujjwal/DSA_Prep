@@ -14,21 +14,28 @@ class Node {
 
 class Solution {
   public:
+    Node* findTail(Node* head){
+        Node* tail = head;
+        while (tail->next) tail = tail->next;
+        return tail;
+    }
     vector<vector<int>> givenSumPairs(Node* head, int target) {
-        Node* temp1 = head;
         vector<vector<int>> ans;
-        while (temp1){
-            Node* temp2 = temp1->next;
-            while (temp2 && temp1->data + temp2->data <= target){
-                if (temp1->data + temp2->data == target){
-                    ans.push_back({temp1->data, temp2->data});
-                }
-                temp2 = temp2->next;
+        if (!head) return ans;
+        Node* left = head;
+        Node* right = findTail(head);
+        while (left->data < right->data){
+            if (left->data + right->data == target){
+                ans.push_back({left->data, right->data});
+                left = left->next;
+                right = right->prev;
             }
-            temp1 = temp1->next;
+            else if (left->data + right->data < target){
+                left = left->next;
+            }
+            else right = right->prev;
         }
         return ans;
-        
     }
 };
 
